@@ -1,10 +1,11 @@
 require "rmclient/version"
+require "active_resource"
 
 module Rmclient
   # Your code goes here...
   # set up REST stuff 
   class RestAPI < ActiveResource::Base
-    self._headers = { 'X-Redmine-API-Key' => Apikey}
+    self._headers = { 'X-Redmine-API-Key' => ENV[REDMINEAPIKEY]} if ENV[REDMINEAPIKEY]
   end
   RestAPI.site =  @site
 
@@ -22,8 +23,8 @@ module Rmclient
     self.prefix = "/enumerations/"
   end
 
-  # print all issues for user
-  def myissues(user = "me", json = false)
+  # print issues assigned to user
+  def myissues(user = "me")
     issues = Issue.find(:all, :params => { :assigned_to_id => user, "limit" => 100})
     issues.each{|i| print "#{i.id} #{i.subject}\n"}
 
@@ -37,11 +38,6 @@ module Rmclient
   # create time entry
   def mktime_entry(id, date, activity, hours, comment)
     # parse date
-    begin
-      date = Date.parse(date).iso8601
-    rescue
-      print "Error parsing date \"#{date}\"\n"
-    end
     a = Time_entry.new(:issue_id => id, :spent_on => date, :hours => hours, :comments => comment, :activity_id => activity)
     a.save()
   end

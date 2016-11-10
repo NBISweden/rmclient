@@ -10,20 +10,53 @@ $LOAD_PATH.unshift File.dirname(__FILE__) + "/../lib"
 require 'rubygems'
 require 'optparse'
 require 'pp'
-require 'active_resource'
 require 'chronic'
 
-Options = Struct.new(:name)
+Options = Struct.new(:query, :issue, :date, :verbose, :user, :hours, :comment, :apikey, :url)
 
 class Parser
   def self.parse(options)
-    args = Options.new("world")
+    args = Options.new()
 
     opt_parser = OptionParser.new do |opts|
       opts.banner = "Usage: #{File.basename($PROGRAM_NAME)} [options]"
+      opts.separator ""
+      opts.separator "Specific options:"
 
-      opts.on("-nNAME", "--name=NAME", "Name to say hello to") do |n|
-        args.name = n
+      opts.on("-rREDMINEURL", "--url=REDMINEURL", "URL to Redmine instance.") do |k|
+        args.apikey = k
+      end
+
+      opts.on("-aAPIKEY", "--apikey=APIKEY", "Redmine API key (default: $REDMINEAPIKEY)") do |k|
+        args.apikey = k
+      end
+
+      opts.on("-qQUERY", "--query=QUERY", "query redmine for activities|issues|time_entries") do |n|
+        args.query = n
+      end
+
+      opts.on("-iISSUEID", "--issue=ISSUEID", "issue number") do |n|
+        args.issue = n
+      end
+
+      opts.on("-dDATE", "--date=DATE", "date (can also parse e.g.\"yesterday\", \"Thursday last week\"; default: today)") do |d|
+        args.date = Chronic.parse(d).to_date.iso8601
+      end
+
+      opts.on("-hHOURS", "--hours=HOURS", "no of hours to log") do |h|
+        args.hours = h
+      end
+
+      opts.on("-cCOMMENT", "--comment=COMMENT", "time entry comment") do |h|
+        args.comment = h
+      end
+
+      opts.on("-v", "--verbose", "verbose output") do |v|
+        args.verbose = true
+      end
+
+      opts.on("-uUSERID", "--user=USERID", "Redmine user id.") do |u|
+        args.user = u
       end
 
       opts.on("-h", "--help", "Prints this help") do
@@ -40,8 +73,26 @@ end
 # main function
 def main()
 
-  # options
+  # parse options
   options = Parser.parse(ARGV)
+
+  if(options.query)
+    if(options.query.start_with?("a"))
+      activities()
+      exit
+    else if (options.query.start_with?("i"))
+      myissues()
+      exit
+    else if(options.query.start_with?("t"))
+      timeentries()
+      exit
+    else 
+      print "Could not parse query.\n"
+      exit
+    end
+  end
+
+  p options.inspect
   pp options
   #myissues()
   #activities()
@@ -49,3 +100,4 @@ def main()
 
 end
 
+main
