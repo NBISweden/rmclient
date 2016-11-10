@@ -1,0 +1,51 @@
+#!/usr/bin/env ruby
+# Encoding: utf-8
+#
+#
+# 2016 Mikael Borg
+#
+
+$LOAD_PATH.unshift File.dirname(__FILE__) + "/../lib"
+
+require 'rubygems'
+require 'optparse'
+require 'pp'
+require 'active_resource'
+require 'chronic'
+
+Options = Struct.new(:name)
+
+class Parser
+  def self.parse(options)
+    args = Options.new("world")
+
+    opt_parser = OptionParser.new do |opts|
+      opts.banner = "Usage: #{File.basename($PROGRAM_NAME)} [options]"
+
+      opts.on("-nNAME", "--name=NAME", "Name to say hello to") do |n|
+        args.name = n
+      end
+
+      opts.on("-h", "--help", "Prints this help") do
+        puts opts
+        exit
+      end
+    end
+
+    opt_parser.parse!(options)
+    return args
+  end
+end
+
+# main function
+def main()
+
+  # options
+  options = Parser.parse(ARGV)
+  pp options
+  #myissues()
+  #activities()
+  #mktime_entry(1647, "2016-11-09", 9, 1, "apitest1")
+
+end
+

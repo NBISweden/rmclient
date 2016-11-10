@@ -6,12 +6,12 @@ require 'rmclient/version'
 Gem::Specification.new do |spec|
   spec.name          = "rmclient"
   spec.version       = Rmclient::VERSION
-  spec.authors       = ["TODO: Write your name"]
-  spec.email         = ["mikael.borg@bils.se"]
-  spec.summary       = %q{TODO: Write a short summary. Required.}
-  spec.description   = %q{TODO: Write a longer description. Optional.}
-  spec.homepage      = ""
-  spec.license       = "MIT"
+  spec.authors       = ["Mikael Borg"]
+  spec.email         = ["mikael.borg@gmail.com"]
+  spec.summary       = %q{Simple redmine command line client.}
+  spec.description   = %q{rmclient ir primarily for logging time on redmine issues. Some limited query featurs are included to facilitate this.}
+  spec.homepage      = "https://github.com/NBISweden/rmclient"
+  spec.license       = "GPL3"
 
   spec.files         = `git ls-files -z`.split("\x0")
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
