@@ -13,11 +13,17 @@ require 'pp'
 require 'chronic'
 require 'rmclient'
 
-Options = Struct.new(:query, :issue, :date, :verbose, :user, :hours, :comment, :apikey, :url)
+include Rmclient
+
+Options = Struct.new(:query, :issue, :date, :verbose, :user, :hours, :comment, :activity, :apikey, :url)
+
 
 class Parser
   def self.parse(options)
     args = Options.new()
+    # set defaults from environment variables
+    args.url = ENV["REDMINEURL"]
+    args.apikey = ENV["REDMINEAPIKEY"] 
 
     opt_parser = OptionParser.new do |opts|
       opts.banner = "Usage: #{File.basename($PROGRAM_NAME)} [options]"
@@ -25,10 +31,10 @@ class Parser
       opts.separator "Specific options:"
 
       opts.on("-rREDMINEURL", "--url=REDMINEURL", "URL to Redmine instance.") do |k|
-        args.apikey = k
+        args.url = k
       end
 
-      opts.on("-aAPIKEY", "--apikey=APIKEY", "Redmine API key (default: $REDMINEAPIKEY)") do |k|
+      opts.on("-kAPIKEY", "--apikey=APIKEY", "Redmine API key (default: $REDMINEAPIKEY)") do |k|
         args.apikey = k
       end
 
@@ -40,11 +46,15 @@ class Parser
         args.issue = n
       end
 
+      opts.on("-aACTIVITY", "--activity=ACTIVITY", "activity for time entry") do |a|
+        args.activity = a
+      end
+
       opts.on("-dDATE", "--date=DATE", "date (can also parse e.g.\"yesterday\", \"Thursday last week\"; default: today)") do |d|
         args.date = Chronic.parse(d).to_date.iso8601
       end
 
-      opts.on("-hHOURS", "--hours=HOURS", "no of hours to log") do |h|
+      opts.on("-nHOURS", "--hours=HOURS", "no of hours to log") do |h|
         args.hours = h
       end
 
@@ -76,10 +86,12 @@ def main()
 
   # parse options
   options = Parser.parse(ARGV)
+  RestAPI._headers = { 'X-Redmine-API-Key' => options.apikey} if options.apikey
+  RestAPI.site = options.url
 
   if(options.query)
     if(options.query.start_with?("a"))
-      Rmclient::activities()
+      Rmclient.activities()
       exit
     elsif (options.query.start_with?("i"))
       Rmclient::myissues()
@@ -88,13 +100,12 @@ def main()
       Rmclient::timeentries()
       exit
     else 
-      print "Could not parse query.\n"
+      print "Error: Could not parse query.\n"
       exit
     end
+    exit
   end
 
-  p options.inspect
-  pp options
   #myissues()
   #activities()
   #mktime_entry(1647, "2016-11-09", 9, 1, "apitest1")

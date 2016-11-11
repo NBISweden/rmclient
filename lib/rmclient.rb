@@ -2,12 +2,9 @@ require "rmclient/version"
 require "active_resource"
 
 module Rmclient
-  # Your code goes here...
   # set up REST stuff 
   class RestAPI < ActiveResource::Base
-    self._headers = { 'X-Redmine-API-Key' => ENV[REDMINEAPIKEY]} if ENV[REDMINEAPIKEY]
   end
-  RestAPI.site =  @site
 
   class Issue   < RestAPI; end
   Issue.format = ActiveResource::Formats::XmlFormat
@@ -27,9 +24,14 @@ module Rmclient
   def myissues(user = "me")
     issues = Issue.find(:all, :params => { :assigned_to_id => user, "limit" => 100})
     issues.each{|i| print "#{i.id} #{i.subject}\n"}
-
   end
 
+  # print time entries for user
+  def mytime_entries(user = "me")
+    entries = Time_entry.find(:all, :params => { :user_id => user, "limit" => 100})
+    entries.each{|e| print "#{e.id} #{i.subject}\n"}
+  end
+ 
   # print possible activities
   def activities()
     Time_entry_activity.find(:all).each{|a| print "#{a.id} #{a.name}\n"}
