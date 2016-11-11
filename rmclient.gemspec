@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.summary       = %q{Simple redmine command line client.}
   spec.description   = %q{rmclient ir primarily for logging time on redmine issues. Some limited query featurs are included to facilitate this.}
   spec.homepage      = "https://github.com/NBISweden/rmclient"
-  spec.license       = "GPL3"
+  spec.license       = "GPL-3.0"
 
   spec.files         = `git ls-files -z`.split("\x0")
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
@@ -20,4 +20,6 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "bundler", "~> 1.7"
   spec.add_development_dependency "rake", "~> 10.0"
+  spec.add_dependency "chronic", "~> 0.10.2"
+  spec.add_dependency "activeresource", "~> 4.1"
 end
