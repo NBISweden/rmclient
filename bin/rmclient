@@ -11,6 +11,7 @@ require 'rubygems'
 require 'optparse'
 require 'pp'
 require 'chronic'
+require 'rmclient'
 
 Options = Struct.new(:query, :issue, :date, :verbose, :user, :hours, :comment, :apikey, :url)
 
@@ -78,13 +79,13 @@ def main()
 
   if(options.query)
     if(options.query.start_with?("a"))
-      activities()
+      Rmclient::activities()
       exit
-    else if (options.query.start_with?("i"))
-      myissues()
+    elsif (options.query.start_with?("i"))
+      Rmclient::myissues()
       exit
-    else if(options.query.start_with?("t"))
-      timeentries()
+    elsif(options.query.start_with?("t"))
+      Rmclient::timeentries()
       exit
     else 
       print "Could not parse query.\n"
