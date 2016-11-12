@@ -4,15 +4,14 @@ require "active_resource"
 module Rmclient
   # set up REST stuff 
   class RestAPI < ActiveResource::Base
+    self.format = ActiveResource::Formats::XmlFormat
   end
 
   class Issue   < RestAPI; end
-  Issue.format = ActiveResource::Formats::XmlFormat
 
 
   class Time_entry < RestAPI
     self.collection_name = 'time_entries'
-    self.format = ActiveResource::Formats::XmlFormat
   end
 
   class Enumeration < RestAPI; end

@@ -24,13 +24,14 @@ class Parser
     # set defaults from environment variables
     args.url = ENV["REDMINEURL"]
     args.apikey = ENV["REDMINEAPIKEY"] 
+    args.date = Date.today.iso8601
 
     opt_parser = OptionParser.new do |opts|
       opts.banner = "Usage: #{File.basename($PROGRAM_NAME)} [options]"
       opts.separator ""
       opts.separator "Specific options:"
 
-      opts.on("-rREDMINEURL", "--url=REDMINEURL", "URL to Redmine instance.") do |k|
+      opts.on("-rREDMINEURL", "--url=REDMINEURL", "URL to Redmine instance (default: $REDMINEURL)") do |k|
         args.url = k
       end
 
@@ -66,9 +67,9 @@ class Parser
         args.verbose = true
       end
 
-      opts.on("-uUSERID", "--user=USERID", "Redmine user id.") do |u|
-        args.user = u
-      end
+      #opts.on("-uUSERID", "--user=USERID", "Redmine user id") do |u|
+      #  args.user = u
+      #end
 
       opts.on("-h", "--help", "Prints this help") do
         puts opts
@@ -106,9 +107,12 @@ def main()
     exit
   end
 
-  #myissues()
-  #activities()
-  #mktime_entry(1647, "2016-11-09", 9, 1, "apitest1")
+  if(options.issue && options.activity && options.hours && options.date)
+    print "Creating time entry.\n"
+    # mktime_entry(id, date, activity, hours, comment)
+    mktime_entry(options.issue, options.date, options.activity, options.hours, options.comment)
+  end
+
 
 end
 
