@@ -98,7 +98,7 @@ def main()
       Rmclient::myissues()
       exit
     elsif(options.query.start_with?("t"))
-      Rmclient::timeentries()
+      Rmclient::mytime_entries()
       exit
     else 
       print "Error: Could not parse query.\n"

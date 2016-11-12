@@ -28,7 +28,7 @@ module Rmclient
   # print time entries for user
   def mytime_entries(user = "me")
     entries = Time_entry.find(:all, :params => { :user_id => user, "limit" => 100})
-    entries.each{|e| print "#{e.id} #{i.subject}\n"}
+    entries.each{|e| print "#{e.id} #{e.spent_on} #{e.hours} #{e.comments}\n"}
   end
  
   # print possible activities
