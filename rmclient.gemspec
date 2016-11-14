@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Mikael Borg"]
   spec.email         = ["mikael.borg@gmail.com"]
   spec.summary       = %q{Simple redmine command line client.}
-  spec.description   = %q{rmclient ir primarily for logging time on redmine issues. Some limited query featurs are included to facilitate this.}
+  spec.description   = %q{rmclient is primarily for logging time on redmine issues. Some limited query features are included to facilitate this.}
   spec.homepage      = "https://github.com/NBISweden/rmclient"
   spec.license       = "GPL-3.0"
 
