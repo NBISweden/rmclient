@@ -39,7 +39,7 @@ class Parser
         args.apikey = k
       end
 
-      opts.on("-qQUERY", "--query=QUERY", "query redmine for activities|issues|time_entries") do |n|
+      opts.on("-qQUERY", "--query=QUERY", "query redmine for activities|issues|time_entries (only first letter is needed)") do |n|
         args.query = n
       end
 
@@ -75,6 +75,14 @@ class Parser
         puts opts
         exit
       end
+      opts.separator ""
+      opts.separator "Examples:"
+      opts.separator ""
+      opts.separator "List of issues assigned to me:"
+      opts.separator "rmclient -r https://redmine.example.com -kXXX -qi"
+      opts.separator ""
+      opts.separator "Create time entry:"
+      opts.separator "rmclient -r https://redmine.example.com -kXXX -i10 -a9 -n2.5 -d\"last Monday\" -c\"improve documentation\""
     end
 
     opt_parser.parse!(options)
@@ -92,13 +100,13 @@ def main()
 
   if(options.query)
     if(options.query.start_with?("a"))
-      Rmclient::activities()
+      Rmclient::print_activities()
       exit
     elsif (options.query.start_with?("i"))
-      Rmclient::myissues()
+      Rmclient::print_issues()
       exit
     elsif(options.query.start_with?("t"))
-      Rmclient::mytime_entries()
+      Rmclient::print_time_entries()
       exit
     else 
       print "Error: Could not parse query.\n"
@@ -108,9 +116,12 @@ def main()
   end
 
   if(options.issue && options.activity && options.hours && options.date)
-    print "Creating time entry.\n"
-    # mktime_entry(id, date, activity, hours, comment)
-    mktime_entry(options.issue, options.date, options.activity, options.hours, options.comment)
+    print "Creating time entry..."
+    if(mktime_entry(options.issue, options.date, options.activity, options.hours, options.comment))
+      print "success!\n"
+    else
+      print "error.\n"
+    end
   end
 
 
