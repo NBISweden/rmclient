@@ -109,19 +109,21 @@ def main()
       Rmclient::print_time_entries()
       exit
     else 
-      print "Error: Could not parse query.\n"
-      exit
+      abort("Error: Could not parse query.\n")
     end
     exit
   end
 
-  if(options.issue && options.activity && options.hours && options.date)
+  if(options.issue && options.activity && options.hours && options.date && options.url && options.apikey)
     print "Creating time entry..."
     if(mktime_entry(options.issue, options.date, options.activity, options.hours, options.comment))
-      print "success!\n"
+      print("success!\n")
+      exit
     else
-      print "error.\n"
+      abort("error.\n")
     end
+  else
+    abort("Not enough information for creating a time entry.\n")
   end
 
 
