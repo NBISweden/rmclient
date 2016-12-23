@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
   spec.description   = %q{rmclient is primarily for logging time on redmine issues. Some limited query features are included to facilitate this.}
   spec.homepage      = "https://github.com/NBISweden/rmclient"
   spec.license       = "GPL-3.0"
-
+  spec.extra_rdoc_files = %w[README.md HISTORY.md LICENSE]
   spec.files         = `git ls-files -z`.split("\x0")
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
