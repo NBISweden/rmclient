@@ -31,7 +31,7 @@ module Rmclient
   #
   # @param issue issue id
   def print_issue(issue)
-    i = Issue.find( "#{issue}" )
+    i = Issue.find( issue )
     print "#{i.id} #{i.subject}\n"
   end
 
