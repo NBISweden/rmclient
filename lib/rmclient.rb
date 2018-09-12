@@ -27,6 +27,14 @@ module Rmclient
     issues.each{|i| print "#{i.id} #{i.subject}\n"}
   end
 
+  # print specific issue
+  #
+  # @param issue issue id
+  def print_issue(issue)
+    i = Issue.find( issue )
+    print "#{i.id} #{i.subject}\n"
+  end
+
   # print time entries for user
   #
   # @param user id

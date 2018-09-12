@@ -39,7 +39,7 @@ class Parser
         args.apikey = k
       end
 
-      opts.on("-qQUERY", "--query=QUERY", "query redmine for activities|issues|time_entries (only first letter is needed)") do |n|
+      opts.on("-qQUERY", "--query=QUERY", "query redmine for activities|issues|time_entries (only first letter is needed). For specific issue, use -qi###.") do |n|
         args.query = n
       end
 
@@ -103,7 +103,11 @@ def main()
       Rmclient::print_activities()
       exit
     elsif (options.query.start_with?("i"))
-      Rmclient::print_issues()
+      if ( options.query =~ /i(\d+)/ )
+        Rmclient::print_issue($1)
+      else
+        Rmclient::print_issues()
+      end
       exit
     elsif(options.query.start_with?("t"))
       Rmclient::print_time_entries()
